@@ -64,3 +64,13 @@ for clave, valor in curso_python.items():
 
 nivel = curso_python.get("nivel", "principiante")
 print("Nivel del curso:", nivel)
+
+for i in range (1, 100):
+    if(i % 3 == 0):
+        print("fizz")
+    if(i % 5 == 0):
+        print("buzz")    
+    if(i % 3 == 0 and i & 5 == 0):
+        print("fizzbuzz")    
+    else:
+        print(i)s
