@@ -26,11 +26,12 @@ def agregar():
             return
         if(price <= 0 and quantity <= 0):
             print(Fore.RED+("ERROR, SOLO SE PERMITEN NUMEROS POSITIVOS"))
+            continue
         else:
             print(Fore.GREEN+("Libro introducido agregado al sistema exitosamente ✔"))
             Amount -= 1
-        book = {"title": title, "price": price, "quantity": quantity}
-        return book
+            book = {"title": title, "price": price, "quantity": quantity}
+
 def consultar():
     busqueda = input(Fore.BLUE+("Cual es el titulo del libro que buscas: "))
     for book in inventory:
@@ -56,15 +57,27 @@ def Actualizar():
             else:
                 book["price"] = nuevo_precio
                 print(Fore.GREEN+("Libro actualizado exitosamente ✔"))
-        if not encontrado:
-            print(Fore.RED+("Libro no encontrado en el sistema (┬┬﹏┬┬)"))
+    if not encontrado:
+        print(Fore.RED+("Libro no encontrado en el sistema (┬┬﹏┬┬)"))
 def eliminar():
     busqueda = input(Fore.BLUE+("Cual es el titulo del libro que actualizaras: "))
-    for book in inventory:
-        if book["title"].lower() == busqueda.lower():
-            delete = input(Fore.BLUE+(f'Estas seguro de que quieres eliminar del sistema a {book} (Y,N): ')).lower().strip()
-            if(delete == "y"):
+    encontrado = [book for book in inventory if book["title"].lower() == busqueda.lower()]
+    if not encontrado:
+        print(Fore.RED + "LIBRO NO ENCONTRADO EN EL SISTEMA")
+        return
+
+    while True:
+        delete = input(Fore.BLUE + f"Se encontraron {len(encontrado)} libro(s) con el título '{busqueda}'. ¿Deseas eliminarlos todos? (Y/N): ").lower().strip()
+        if delete == "y":
+            for book in encontrado:
                 inventory.remove(book)
+            print(Fore.GREEN + f"Se eliminaron {len(encontrado)} libro(s) correctamente.")
+            break
+        elif delete == "n":
+            print(Fore.YELLOW + "No se eliminó ningún libro.")
+            break
+        else:
+            print(Fore.RED + "INGRESA UN VALOR ENTRE Y/N")
 def Calcular():
     total = sum(p["price"] * p["quantity"] for p in inventory)
     print(f"El valor total del inventario es: {total:.2f}")
