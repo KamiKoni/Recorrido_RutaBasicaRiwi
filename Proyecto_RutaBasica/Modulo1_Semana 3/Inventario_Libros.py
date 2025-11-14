@@ -10,49 +10,63 @@ inventory = [
 global Amount
 Amount = 0
 def agregar():
-    Amount = int(input(Fore.BLUE("Cuantos libros quieres agregar al sistema: ")))
+    book = []
+    try:
+        Amount = int(input(Fore.BLUE + "¿Cuántos libros quieres agregar al sistema?: "))
+    except ValueError:
+        print(Fore.RED + "ERROR: Valor ingresado no válido.")
+        return
     while Amount != 0:
         try:
             title = input("Cual es el titulo del libro?: ")
             price = float(input("Cual es el precio del libro?: "))
             quantity = int(input("Cual es la cantidad del libro en stock?: "))
-            Amount -= 1
         except ValueError:
-            print(Fore.RED("ERROR, VALOR INGRESADO NO VALIDO"))
-        if(inventory["price"] and inventory["quantity"] > 0):
-            print(Fore.RED("ERROR, SOLO SE PERMITEN NUMEROS POSITIVOS"))
+            print(Fore.RED + ("ERROR, VALOR INGRESADO NO VALIDO"))
+            return
+        if(price <= 0 and quantity <= 0):
+            print(Fore.RED+("ERROR, SOLO SE PERMITEN NUMEROS POSITIVOS"))
         else:
-            print(Fore.green("Libro introducido agregado al sistema exitosamente ✔"))
+            print(Fore.GREEN+("Libro introducido agregado al sistema exitosamente ✔"))
+            Amount -= 1
         book = {"title": title, "price": price, "quantity": quantity}
-        book.append(inventory)
+        return book
 def consultar():
-    busqueda = input(Fore.BLUE("Cual es el titulo del libro que buscas: "))
-    for libro in inventory:
-        if libro["title"].lower() == busqueda.lower():   # comparación sin mayúsc./minúsc.
-            print(f"Titulo: {libro['title']} | Precio: {libro['price']} | Cantidad en stock: {libro['quantity']}")
+    busqueda = input(Fore.BLUE+("Cual es el titulo del libro que buscas: "))
+    for book in inventory:
+        if book["title"].lower() == busqueda.lower():   # comparación sin mayúsc./minúsc.
+            print(f"Titulo: {book['title']} | Precio: {book['price']} | Cantidad en stock: {book['quantity']}")
             return
     else:
-        print(Fore.RED("El libro que ingresaste no esta actualmente en el inventario"))
+        print(Fore.RED + ("El libro que ingresaste no esta actualmente en el inventario"))
 def Actualizar():
-    busqueda = input(Fore.BLUE("Cual es el titulo del libro que actualizaras: "))
-    for libro in inventory:
-        if libro["title"].lower() == busqueda.lower():
-            inventory["price"] = input(Fore.BLUE("Ingresa el precio nuevo de", libro ,": "))
-            if(libro["price"] > 0):
-                print(Fore.RED("ERROR, SOLO SE PERMITEN NUMEROS POSITIVOS"))
+    busqueda = input(Fore.BLUE+("Cual es el titulo del libro que actualizaras: "))
+    encontrado = False
+    for book in inventory:
+        if book["title"].lower() == busqueda.lower():
+            encontrado = True
+            try:
+                nuevo_precio = float(input(Fore.BLUE+(f"Ingresa el precio nuevo de {book['title']}: ")))
+            except ValueError:
+                print(Fore.RED + ("ERROR, VALOR INGRESADO NO VALIDO"))
+                return
+            if(nuevo_precio <= 0):
+                print(Fore.RED+("ERROR, SOLO SE PERMITEN NUMEROS POSITIVOS"))
+                return
             else:
-                print(Fore.RED(Fore.GREEN("Libro actualizado exitosamente ✔")))
-        else:
-            print(Fore.RED("Libro no encontrado en el sistema (┬┬﹏┬┬)"))
+                book["price"] = nuevo_precio
+                print(Fore.GREEN+("Libro actualizado exitosamente ✔"))
+        if not encontrado:
+            print(Fore.RED+("Libro no encontrado en el sistema (┬┬﹏┬┬)"))
 def eliminar():
-    busqueda = input(Fore.BLUE("Cual es el titulo del libro que actualizaras: "))
-    for libro in inventory:
-        if libro["title"].lower() == busqueda.lower():
-            delete = input(Fore.BLUE(f'Estas seguro de que quieres eliminar del sistema a {libro} (Y,N): ')).lower().strip()
+    busqueda = input(Fore.BLUE+("Cual es el titulo del libro que actualizaras: "))
+    for book in inventory:
+        if book["title"].lower() == busqueda.lower():
+            delete = input(Fore.BLUE+(f'Estas seguro de que quieres eliminar del sistema a {book} (Y,N): ')).lower().strip()
             if(delete == "y"):
-                inventory.remove(libro)
+                inventory.remove(book)
 def Calcular():
-    total = sum(p["price"] * p["cantidad"] for p in inventory)
+    total = sum(p["price"] * p["quantity"] for p in inventory)
     print(f"El valor total del inventario es: {total:.2f}")
 while True:
     try:
@@ -65,7 +79,7 @@ while True:
 6. Salir del programa  
 Elige una opción: """))
     except ValueError:
-        print(" ERROR: Debes ingresar un número.")
+        print(Fore.RED + " ERROR: Debes ingresar un número.")
         continue
 
     if option == 1:
