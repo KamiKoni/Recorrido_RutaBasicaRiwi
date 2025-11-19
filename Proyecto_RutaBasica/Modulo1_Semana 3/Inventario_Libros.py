@@ -31,7 +31,7 @@ def agregar():
             print(Fore.RED+("ERROR, SOLO SE PERMITEN NUMEROS POSITIVOS"))
             continue
         else:
-            print(Fore.GREEN+("Libro introducido agregado al sistema exitosamente ✔"))
+            print(Fore.GREEN+("Libro introducido, agregado al sistema exitosamente ✔"))
             Amount -= 1
             book = {"title": title, "price": price, "quantity": quantity}
             inventory.append(book)  #Agrega el libro introducido por el usuario al sistema.
