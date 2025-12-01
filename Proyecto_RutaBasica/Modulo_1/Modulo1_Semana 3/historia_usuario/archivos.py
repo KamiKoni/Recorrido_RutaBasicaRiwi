@@ -71,7 +71,7 @@ def cargar_csv(ruta, inventario):
         return inventario, "Error: El archivo está vacío."
 
     # Validar encabezado
-    encabezado = [c.strip().lower() for c in filas[0]]
+    encabezado = [fila.strip().lower() for fila in filas[0]]
     if encabezado != ["nombre", "precio", "cantidad"]:
         return inventario, "Error: Encabezado inválido. Debe ser: nombre,precio,cantidad."
 
